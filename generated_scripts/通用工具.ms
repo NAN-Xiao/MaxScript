@@ -203,12 +203,12 @@ rollout unnamedRollout "Utilty Tools" width:280 height:542
 	)
 )
 --export tool
-rollout exporttool "Export Tools" width:280 height:181
+rollout exporttool "Export Tools" width:296 height:168
 (
-	button 'export' "Clear&ExportFBX" pos:[16,85] width:247 height:52 align:#left
-	button 'folder' "Path" pos:[209,40] width:43 height:29 align:#left
-	editText 'path' "" pos:[23,43] width:171 height:22 align:#left
-	groupBox 'grp7' "save path" pos:[15,16] width:250 height:65 enabled:false align:#left
+	button 'export' "Export    FBX" pos:[15,97] width:264 height:52 align:#left
+	button 'folder' "....." pos:[228,37] width:34 height:29 align:#left
+	editText 'path' "" pos:[24,40] width:199 height:22 align:#left
+	groupBox 'grp7' "save path" pos:[15,16] width:264 height:65 enabled:false align:#left
 	on folder pressed  do
 	(
 		folderPath = getSavePath()

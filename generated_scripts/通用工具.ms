@@ -27,6 +27,7 @@ rollout unnamedRollout "Utilty Tools" width:280 height:542
 	(
 		if selection.count<=0 then
 		(
+			messageBox "没有选择物体"
 		    Print("not selected any objects")
 		)
 		for obj in selection do
@@ -43,6 +44,7 @@ rollout unnamedRollout "Utilty Tools" width:280 height:542
 		allMat=#()
 		if selection.count<=0 then
 		(
+			messageBox "没有选择物体"
 			Print("not selected any objects")
 		)
 		for obj in selection do
@@ -81,7 +83,7 @@ rollout unnamedRollout "Utilty Tools" width:280 height:542
 		--归零
 		if selection.count<=0 then
 		(
-
+			messageBox "没有选择物体"
 		    Print("not selected any objects")
 		)
 		for obj in selection do
@@ -104,6 +106,7 @@ rollout unnamedRollout "Utilty Tools" width:280 height:542
 		--归零
 		if selection.count<=0 then
 		(
+			messageBox "没有选择物体"
 		    Print("not selected any objects")
 		)
 		for obj in selection do
@@ -116,6 +119,7 @@ rollout unnamedRollout "Utilty Tools" width:280 height:542
 		--删除多余点
 		if selection.count<=0 then
 		(
+			messageBox "没有选择物体"
 		    Print("not selected any objects")
 		)
 		for obj in selection do
@@ -152,6 +156,7 @@ rollout unnamedRollout "Utilty Tools" width:280 height:542
 	
 		if selection.count<=0 then
 		(
+			messageBox "没有选择物体"
 		    Print("not selected any objects")
 		)
 		for obj in selection do
@@ -188,7 +193,7 @@ rollout unnamedRollout "Utilty Tools" width:280 height:542
 				deleteKeys obj.rotation.controller
 			) 
 		)
-	
+		messageBox "清除Channel完成"
 		Print("Clear channel")
 	)
 
@@ -213,6 +218,7 @@ rollout exporttool "Export Tools" width:280 height:181
 	(
 		if path.text=="" then
 		(
+			messageBox "请先选择导出的路径"
 			Print("export path is null")
 		)
 		else
@@ -235,7 +241,6 @@ rollout exporttool "Export Tools" width:280 height:181
 						fname=getFilenameFile f
 						if filename==fname then 
 						(
-							print "change name"
 							filename=(filename+"_"+ind as string)
 							--ind+=1
 						)
@@ -243,7 +248,9 @@ rollout exporttool "Export Tools" width:280 height:181
 				)
 				completeFilePath = (fpath + "/" + filename)
 				exportFile completeFilePath #noPrompt selectedOnly:true using:FBXEX
+				
 			)
+			messageBox "导出全部fbx"
 		)
 	)
 )

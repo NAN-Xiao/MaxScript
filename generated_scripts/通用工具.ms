@@ -1,28 +1,26 @@
-
-
-
-
-rollout unnamedRollout "Utilty Tools" width:280 height:542
+rollout unnamedRollout "Utilty Tools" width:280 height:610
 (
-	button 'resetBtn' "ResetXForm" pos:[37,9] width:201 height:45 align:#left
-	button 'checkmat' "CheckMaterial" pos:[37,232] width:201 height:45 align:#left
-	button 'movepivot' "ResetPivot" pos:[38,113] width:201 height:45 align:#left
-	button 'chabtn' "ClearChannel" pos:[37,393] width:201 height:45 align:#left
-	checkbox 'suv2' "uv2" pos:[39,332] width:47 height:14 align:#left
-	groupBox 'grp1' "SelectChannel" pos:[24,293] width:228 height:166 align:#left
-	checkbox 'salpha' "alpha" pos:[108,332] width:47 height:14 align:#left
-	checkbox 'scolor' "color" pos:[182,332] width:47 height:14 align:#left
-	checkbox 'sanima' "animation" pos:[39,362] width:64 height:14 align:#left
-	button 'movepos' "MovePosToZero" pos:[37,171] width:201 height:45 align:#left
-	dropDownList 'spivot' "Pivot" pos:[43,58] width:190 height:41 items:#("Top", "Buttom", "Align world") selection:2 align:#left
-	button 'removevertex' "RemoveIsolabedVertex" pos:[37,470] width:201 height:45 align:#left
-
+	button 'resetBtn' "ResetXForm" pos:[39,12] width:201 height:45 align:#left
+	button 'checkmat' "CheckMaterial" pos:[39,296] width:201 height:45 align:#left
+	button 'movepivot' "ResetPivot" pos:[39,116] width:201 height:45 align:#left
+	button 'chabtn' "ClearChannel" pos:[38,518] width:201 height:45 align:#left
+	checkbox 'suv2' "uv2" pos:[46,460] width:47 height:14 align:#left
+	groupBox 'grp1' "SelectChannel" pos:[27,423] width:228 height:166 align:#left
+	checkbox 'salpha' "alpha" pos:[109,457] width:47 height:14 align:#left
+	checkbox 'scolor' "color" pos:[183,457] width:47 height:14 align:#left
+	checkbox 'sanima' "animation" pos:[46,490] width:64 height:14 align:#left
+	button 'movepos' "MovePosToZero" pos:[39,174] width:201 height:45 align:#left
+	dropDownList 'spivot' "Pivot" pos:[44,62] width:190 height:41 items:#("Top", "Buttom", "Align world") selection:2 align:#left
+	button 'removevertex' "RemoveIsolabedVertex" pos:[39,234] width:201 height:45 align:#left
+	button 'checkUV' "CheckUV2OutSide" pos:[40,362] width:201 height:45 align:#left
 	global  clearuv2
 	global  clearalpha
 	global  clearcolor
 	global  clearanima
 	global _pivot
 	global allMat
+
+	global uvobj=#()
 	on resetBtn pressed  do
 	(
 		if selection.count<=0 then
@@ -60,24 +58,77 @@ rollout unnamedRollout "Utilty Tools" width:280 height:542
 		if allMat.count>0 then 
 		(
 			path=maxFilePath
-			if path!="" then
+			if path=="" then 
 			(
-				file=(path+"/"+(getFilenameFile maxFileName)+"_Log.txt")
+				path="C:\Users\Administrator\Desktop"
+			)
+			file=(path+"/"+(getFilenameFile maxFileName)+"_Multi/sub-obj.txt")
+			deleteFile file
+			str=createfile file
+			s="Multi/sub-obj: \n"
+			Format s to:str
+			for m in allMat do 
+			(
+				s=(m.name+"\n")
+				Format s to:str
+			)
+			close str	
+			messageBox "some object has Multi/sub-obj material"
+		)
+	)	
+	on checkUV pressed  do
+	(
+		if selection.count<=0 then
+		(
+			messageBox "没有选择物体"
+		    Print("not selected any objects")
+		)
+		for obj in selection do 
+		(
+			convertToPoly obj --转换成poly
+			has=polyop.getMapSupport obj 2 --是否有uv2
+			if has==true then 
+			(
+				ver=polyop.getNumMapVerts obj 2 
+				if ver>0 then
+				(
+					--print ver
+					for i=1 to ver do 
+					(
+						uvw=polyop.getMapVert obj 2 i
+						x=uvw.x
+						y=uvw.y
+						z=uvw.z
+						if (x<0 OR x>1 or y<0 OR y>1 or z<0 OR z>1) then 
+						(
+							append uvobj obj
+						)
+					)
+				)
+			)
+			if uvobj.count>0 then 
+			(
+				path=maxFilePath
+				if path=="" then 
+				(
+					path="C:\Users\Administrator\Desktop"
+				)
+				file=(path+"/"+(getFilenameFile maxFileName)+"_uv2.txt")
 				deleteFile file
 				str=createfile file
-				s="Multi/sub-obj: \n"
+				s="uv2_outside: \n"
 				Format s to:str
-				for m in allMat do 
+				for m in uvobj do 
 				(
 					s=(m.name+"\n")
 					Format s to:str
 				)
 				close str
+				messageBox "some object's uv2 outsid"
 			)
-			
 		)
-	)	
-	
+
+	)
 	on movepivot pressed  do
 	(
 		--归零

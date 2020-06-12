@@ -275,28 +275,28 @@ rollout exporttool "Export Tools" width:296 height:168
 		else
 		(
 			fpath=path.text
-			fils=getfiles (fpath+"/"+"*.fbx")
-			for f in fils do 
-			(
-				deleteFile f
-			)
+			--fils=getfiles (fpath+"/"+"*.fbx")
+		--	for f in fils do 
+			--(
+		--		deleteFile f
+		--	)
 			for obj in selection do 
 			(
 				filename=obj.name						
-				fils=getfiles (fpath+"/"+"*.fbx")
-				if fils.count!=0 then
-				(	
-					ind=0
-					for f in fils do 
-					(
-						fname=getFilenameFile f
-						if filename==fname then 
-						(
-							filename=(filename+"_"+ind as string)
+			--	fils=getfiles (fpath+"/"+"*.fbx")
+			--	if fils.count!=0 then
+			--	(	
+				--	ind=0
+				--	for f in fils do 
+				--	(
+				--		fname=getFilenameFile f
+				--		if filename==fname then 
+				--		(
+				--			filename=(filename+"_"+ind as string)
 							--ind+=1
-						)
-					)
-				)
+				--		)
+				--	)
+				--)
 				completeFilePath = (fpath + "/" + filename)
 				exportFile completeFilePath #noPrompt selectedOnly:true using:FBXEX
 				

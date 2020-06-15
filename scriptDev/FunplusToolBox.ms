@@ -1,18 +1,19 @@
-rollout unnamedRollout "Utilty Tools" width:280 height:610
+rollout Utilty "Utilty Tools" width:272 height:444
 (
-	button 'resetBtn' "ResetXForm" pos:[39,12] width:201 height:45 align:#left
-	button 'checkmat' "CheckMaterial" pos:[39,296] width:201 height:45 align:#left
-	button 'movepivot' "ResetPivot" pos:[39,116] width:201 height:45 align:#left
-	button 'chabtn' "ClearChannel" pos:[38,518] width:201 height:45 align:#left
-	checkbox 'suv2' "uv2" pos:[46,460] width:47 height:14 align:#left
-	groupBox 'grp1' "SelectChannel" pos:[27,423] width:228 height:166 align:#left
-	checkbox 'salpha' "alpha" pos:[109,457] width:47 height:14 align:#left
-	checkbox 'scolor' "color" pos:[183,457] width:47 height:14 align:#left
-	checkbox 'sanima' "animation" pos:[46,490] width:64 height:14 align:#left
-	button 'movepos' "MovePosToZero" pos:[39,174] width:201 height:45 align:#left
-	dropDownList 'spivot' "Pivot" pos:[44,62] width:190 height:41 items:#("Top", "Buttom", "Align world") selection:2 align:#left
-	button 'removevertex' "RemoveIsolabedVertex" pos:[39,234] width:201 height:45 align:#left
-	button 'checkUV' "CheckUV2OutSide" pos:[40,362] width:201 height:45 align:#left
+	button 'resetBtn' "ResetXForm" pos:[30,18] width:100 height:30 align:#left
+	button 'checkmat' "CheckMat" pos:[30,66] width:100 height:30 align:#left
+	groupBox 'grp6' "Pivot" pos:[29,155] width:214 height:108 align:#left
+	button 'movepivot' "ResetPivot" pos:[46,209] width:188 height:39 align:#left
+	button 'btn17' "CheckUV2" pos:[146,68] width:100 height:30 align:#left
+	checkbox 'salpha' "alpha" pos:[183,303] width:46 height:23 checked:false align:#left
+	checkbox 'suv2' "uv2" pos:[37,303] width:60 height:23 checked:false align:#left
+	checkbox 'scolor' "color" pos:[110,303] width:55 height:23 align:#left
+	groupBox 'grp7' "ClearChannel" pos:[29,280] width:214 height:142 align:#left
+	button 'chabtn' "ClearChannel" pos:[42,368] width:188 height:39 align:#left
+	button 'movepos' "MoveZero" pos:[146,19] width:100 height:30 align:#left
+	checkbox 'sanima' "animation" pos:[37,328] width:60 height:23 enabled:true checked:false align:#left
+	button 'removevertex' "RemoveIsolabedVertex" pos:[30,111] width:214 height:30 align:#left
+	radioButtons 'pivotselect' "" pos:[45,176] width:168 height:16 enabled:true labels:#("buttom", "top", "world") columns:3 align:#left
 	global  clearuv2
 	global  clearalpha
 	global  clearcolor
@@ -129,8 +130,11 @@ rollout unnamedRollout "Utilty Tools" width:280 height:610
 		)
 
 	)
+	
+
 	on movepivot pressed  do
 	(
+		
 		--归零
 		if selection.count<=0 then
 		(
@@ -142,12 +146,13 @@ rollout unnamedRollout "Utilty Tools" width:280 height:610
 			-- center.z = obj.min.z
 			--modPanel.setCurrentObject(obj)
 			center = obj.center
-			case _pivot of
+			Print pivotselect.state as string
+			case pivotselect.state of
 			(
-				"Buttom":  center.z = obj.min.z
-				"Top":	   center.z = obj.max.z
-				"Align world": center=[0,0,0]
-				default :  center.z = obj.min.z
+				1: center.z = obj.max.z 
+				2: center.z = obj.min.z 
+				3: center=[0,0,0]
+			--	default :  center.z = obj.min.z
 			)
 			obj.pivot = center
 		)
@@ -248,18 +253,14 @@ rollout unnamedRollout "Utilty Tools" width:280 height:610
 		Print("Clear channel")
 	)
 
-	on spivot selected sel do
-	(
-		_pivot=spivot.items[sel]
-	)
 )
 --export tool
-rollout exporttool "Export Tools" width:296 height:168
+rollout exporttool "Export Tools" width:272 height:168
 (
-	button 'export' "Export    FBX" pos:[15,97] width:264 height:52 align:#left
-	button 'folder' "....." pos:[228,37] width:34 height:29 align:#left
-	editText 'path' "" pos:[24,40] width:199 height:22 align:#left
-	groupBox 'grp7' "save path" pos:[15,16] width:264 height:65 enabled:false align:#left
+	button 'export' "Export    FBX" pos:[13,97] width:245 height:52 align:#left
+	button 'folder' "....." pos:[214,37] width:34 height:29 align:#left
+	editText 'path' "" pos:[23,40] width:177 height:22 align:#left
+	groupBox 'grp7' "save path" pos:[15,16] width:245 height:65 enabled:false align:#left
 	on folder pressed  do
 	(
 		folderPath = getSavePath()
@@ -306,6 +307,6 @@ rollout exporttool "Export Tools" width:296 height:168
 	)
 )
 --createdialog unnamedRollout 
-rf = newRolloutFloater "FunPlus Tool Box" 280 900
-addRollout unnamedRollout rf
+rf = newRolloutFloater "FunPlus Tool Box" 283 900
+addRollout Utilty rf
 addRollout exporttool rf

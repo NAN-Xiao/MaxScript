@@ -281,7 +281,7 @@ rollout Utilty "Utilty Tools" width:272 height:444
 
 )
 --export tool
-rollout exporttool "Export Tools" width:272 height:168
+rollout exporttool "Export Object" width:272 height:168
 (
 	button 'export' "Export    FBX" pos:[13,97] width:245 height:52 align:#left
 	button 'folder' "....." pos:[214,37] width:34 height:29 align:#left
@@ -332,7 +332,77 @@ rollout exporttool "Export Tools" width:272 height:168
 		)
 	)
 )
+
+rollout ExportPatch "ExportPatch" width:272 height:168
+(
+	button 'export' "ExportPath" pos:[13,97] width:245 height:52 align:#left
+	button 'folder' "....." pos:[214,37] width:34 height:29 align:#left
+	editText 'path' "" pos:[23,40] width:177 height:22 align:#left
+
+	on folder pressed  do
+	(
+		folderPath = getSaveFileName()
+		Print folderPath
+		path.text = folderPath
+	)
+	on export pressed  do
+	(
+
+		if path.text=="" do
+		(
+			messageBox "请先选择导出的路径"
+			break
+		)
+	
+	--	Print  selection.count
+		if  selection.count==1 then
+		(
+			obj=selection[1]
+			if ClassOf(obj)!=Line do 
+			(
+				messageBox "this object is not a line"
+				break
+			)
+	
+			maxOps.CloneNodes selection  cloneType:#copy newNodes:&result
+			result.name="temp"
+			select result
+			convertTo $ PolyMeshObject
+			vers=polyop.getVertsByFlag $ 0
+			if vers.count>0 do 
+			(
+				pos=#()
+				for index in vers do 
+				(
+
+					v=polyop.getVert $ index
+					p=[v.x, v.z ,v.y]
+					
+					append pos p
+				)
+				--写文件
+				if pos.count>0 do 
+				(	
+					Print "export position"
+					file=path.text
+					--deleteFile file
+					str=createfile file
+					for p in pos do 
+					(
+						Format ((p as string)+"\n") to:str
+						--Format "\n" to:str
+					)
+					close str	
+				)
+			
+			)
+			delete $
+		)
+	
+	)
+)
 --createdialog unnamedRollout 
-rf = newRolloutFloater "FunPlus Tool Box" 283 900
+rf = newRolloutFloater "FunPlus Tool Box" 285 900
 addRollout Utilty rf
 addRollout exporttool rf
+addRollout ExportPatch rf

@@ -24,23 +24,21 @@ rollout dd  "Untitled" width:162 height:300
 		startTime = AnimationRange.Start
 		endTime = AnimationRange.End
 		m=pc.transform.position
-		r=pc.transform.rotationPart
-	
-
-	
-		r2=inverse r
-
-		Print "r2"
-		Print r2
-		Print "\n"
-		Print endTime
+		--Print "r2"
+		--Print r2
+	--	Print "\n"
+		--Print startTime
 		for i=startTime to endTime do(
 			sliderTime=i
 			v=$.transform.position
 			--print v
 			v2=v-m
-		--	Format "v:%  m:%" v m
-			f=v2*r2
+	
+			--Format "v:%  m:%" v m
+			f=v2*(inverse pc.transform)
+			--Print f
+			--Print m
+			--Print v
 			if abs f.x<0.001 do (
 				f.x=0
 			)
@@ -50,24 +48,60 @@ rollout dd  "Untitled" width:162 height:300
 			if abs f.z<0.001 do (
 				f.z=0
 			)
-			Print f
+
 			append Pos f
-			--print f
-			--rr=quatToEuler($.transform.rotation*r2)
-		--	Print rr
-			--append Rot rot
+			print f
+			tram=$.transform*(inverse pc.transform)
+			rr=quatToEuler(tram.rotationPart)
+
+			if abs rr.x<0.001 do (
+				rr.x=0
+			)
+			if abs rr.y<0.001 do (
+				rr.y=0
+			)
+			if abs rr.z<0.001 do (
+				rr.z=0
+			)
+
+			--Print rr
+			append Rot rr
 		)
 
-		--if Pos.count!=Rot.count do (
-		--	print "Poskey count != rot key count"
-			--return null
-	--	)
-		for i=1 to Pos.count do (
-		--	print Rot[i]
-		--	Print Pos[i]
-		)
+		path="C:\Users\Administrator\Desktop"
+		file=(path+"/"+(getFilenameFile maxFileName)+"_path.json")
+		deleteFile file
+		str=createfile file
+		Format ("{\n") to:str
+		Format "\"Pos\": \n" to:str
+		Format "[ \n" to:str
+		for j=1 to Pos.count do (
+			Format ("{\n") to:str
+			Format ("\"x\":"+Pos[j].x as string+",\n") to:str
+			Format ("\"y\":"+Pos[j].y as string+",\n") to:str
+			Format ("\"z\":"+Pos[j].z as string+"\n") to:str
 		
-		m90= pc.transform*Matrix3[1,0,0][0,0,-1][0,1,0][0,0,0]
+			if j<Pos.count then(
+				Format ("},\n") to:str
+			)else(
+				Format ("}\n") to:str
+			)
+			Print j
+		--	Format ( Pos[j] as string+"\n") to:str
+
+		)
+		Format "]\n" to:str
+		Format ("}\n") to:str
+	--	Format "Rot: \n" to:str
+		--print Pos as string
+		for j=1 to Rot.count do (
+
+		--	Format( Rot[j] as string+"\n")  to:str
+		)
+		close str
+		
+
+		x90= pc.transform*Matrix3[1,0,0][0,0,-1][0,1,0][0,0,0]
 		
 
 	)

@@ -90,14 +90,28 @@ rollout dd  "Untitled" width:162 height:300
 		--	Format ( Pos[j] as string+"\n") to:str
 
 		)
-		Format "]\n" to:str
-		Format ("}\n") to:str
-	--	Format "Rot: \n" to:str
-		--print Pos as string
-		for j=1 to Rot.count do (
-
-		--	Format( Rot[j] as string+"\n")  to:str
+	
+		Format "],\n" to:str
+		
+		--rot
+		Format "\"Rot\": \n" to:str
+		Format "[ \n" to:str
+		for j=1 to Pos.count do (
+			Format ("{\n") to:str
+			Format ("\"x\":"+Rot[j].x as string+",\n") to:str
+			Format ("\"y\":"+Rot[j].y as string+",\n") to:str
+			Format ("\"z\":"+Rot[j].z as string+"\n") to:str
+		
+			if j<Pos.count then(
+				Format ("},\n") to:str
+			)else(
+				Format ("}\n") to:str
+			)
+			Print j
 		)
+		Format "]\n" to:str
+		--rot end
+		Format ("}\n") to:str
 		close str
 		
 

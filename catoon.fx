@@ -103,8 +103,8 @@ float g_specularStrength <
 float g_edgeThickness <
 	string UIName = "EdgeThickness";
 	string UIWidget = "slider";
-	float UIMin = 0.0001f;
-	float UIMax = 0.2f;
+	float UIMin = 0.01f;
+	float UIMax = 1;
 	float UIStep = 0.00001f;
 > = 0.003f;
 
@@ -127,7 +127,7 @@ struct appdata
 	float3 Tangent		: TANGENT;
 	float3 Binormal		: BINORMAL;
 	float2 UV0		: TEXCOORD0;
-	float3 Colour		: TEXCOORD1;
+	float4 Colour		: COLOR;
 	float3 Alpha		: TEXCOORD2;
 	float3 Illum		: TEXCOORD3;
 	float3 UV1		: TEXCOORD4;
@@ -147,6 +147,7 @@ struct vertexOutput
 	float4 UV1		: TEXCOORD6;
 	float4 UV2		: TEXCOORD7;
 	float4 wPos		: TEXCOORD8;
+	float4 Color	: TEXCOORD9;
 };
 
 // 顶点着色器
@@ -176,7 +177,7 @@ vertexOutput std_VS(appdata IN)
 	OUT.UV0.a = colour.g;
 	OUT.UV1.z = colour.b;
 	OUT.UV1.a = colour.a;
-
+	OUT.Color = IN.Colour;
 	return OUT;
 }
 
@@ -223,14 +224,13 @@ vertexOutput std_VS_OutLine(appdata IN)
 	float4 colour;
 	colour.rgb = IN.Colour;
 	colour.a = IN.Alpha.x;
-
 	// float3 view_vertex = mul(UNITY_MATRIX_V, mul(unity_ObjectToWorld, float4(v.vertex, 1.0))).xyz;
 	float3 view_vertex = mul(mul(float4(IN.Position.xyz, 1.0), WorldXf), ViewXf).xyz;
 
 	// float3 view_normal = mul(UNITY_MATRIX_IT_MV, float4(v.normal, 0.0));
 	float3 view_normal = mul(float4(IN.Normal, 0.0), WvITXf);
 
-	view_vertex.xyz += normalize(view_normal) * g_edgeThickness;
+	view_vertex.xyz +=( normalize(view_normal) * g_edgeThickness)*IN.Colour;
 	OUT.HPosition = mul(float4(view_vertex, 1.0), ProjectionXf);
 
 
@@ -245,7 +245,7 @@ vertexOutput std_VS_OutLine(appdata IN)
 	OUT.UV0.xy = IN.UV0.xy;
 	OUT.UV1.xy = IN.UV1.xy;
 	OUT.UV2.xyz = IN.UV2.xyz;
-
+	OUT.Color = colour;
 	return OUT;
 }
 

@@ -27,6 +27,7 @@ float3 lightDir : Direction < string UIName = "Light Direction"; string Object =
 
 // 基础纹理
 Texture2D <float4> g_BaseColorTexture < string UIName = "BaseColor"; string ResourceType = "2D"; int Texcoord = 0; int MapChannel = 1; > ;
+Texture2D <float4> g_RampColorTexture < string UIName = "RampColor"; string ResourceType = "2D"; int Texcoord = 0; int MapChannel = 2; > ;
 
 SamplerState g_BaseColorSampler
 {
@@ -35,6 +36,14 @@ SamplerState g_BaseColorSampler
 	MipFilter = Linear;
 	AddressU = Wrap;
 	AddressV = Wrap;
+};
+SamplerState g_RampColorSampler
+{
+	MinFilter = Linear;
+	MagFilter = Linear;
+	MipFilter = Linear;
+	AddressU = Clamp;
+	AddressV = Clamp;
 };
 
 // 漫反射基础属性
@@ -146,6 +155,7 @@ vertexOutput std_VS(appdata IN)
 	vertexOutput OUT = (vertexOutput)0;
 
 	OUT.WorldNormal = mul(IN.Normal, WorldITXf).xyz;
+	
 	float4 Po = float4(IN.Position.xyz, 1);
 	float3 Pw = mul(Po, WorldXf).xyz;
 	OUT.LightVec = lightDir;// (Lamp0Pos - Pw);
@@ -175,7 +185,7 @@ float4 std_PS(vertexOutput IN) : SV_Target
 {
 	// 采样纹理
 	float4 baseColor = g_BaseColorTexture.Sample(g_BaseColorSampler,IN.UV0.xy);
-
+	
 	// 基本属性
 	float3 Vn = normalize(IN.WorldView);
 	float3 Nn = normalize(IN.WorldNormal);
@@ -185,9 +195,12 @@ float4 std_PS(vertexOutput IN) : SV_Target
 	float NdH = dot(Nn, Hn);
 	float NdL = dot(Nn, Ln);
 
+	float uv = NdL;
 	// 漫反射
-	float4 diffuse = smoothstep(g_DiffusSmoothDown, g_DiffusSmoothUp, NdL);
-	diffuse = lerp(k_a, k_d, diffuse);
+	float4 diffuse = g_RampColorTexture.Sample(g_RampColorSampler, clamp(NdL*0.5 + 0.5,0,1.0f)*0.9+0.01);
+
+	//float4 diffuse = smoothstep(g_DiffusSmoothDown, g_DiffusSmoothUp, NdL);
+	//diffuse = lerp(k_a, k_d, diffuse);
 
 	// 高光
 	float specularIntensity = pow(NdH, g_glossiness * g_glossiness);

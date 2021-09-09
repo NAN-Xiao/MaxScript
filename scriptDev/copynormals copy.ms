@@ -9,6 +9,7 @@ rollout dd "Untitled" width:162 height:150
 	(
 		sel = getcurrentselection() --当前选择的物体
 		pb1.value = 0
+
 		For o = 1 to sel.count do (
 			--塌陷成editble mesh
 			convertToPoly sel[o]
@@ -25,6 +26,10 @@ rollout dd "Untitled" width:162 height:150
 			subobjectlevel = 1
 			max select all
 			En.EditNormalsMod.unify()
+
+
+			--进度条数量
+			prograss=sel.count+vt
 			--遍历顶点返回法线引用
 			for vn = 1 to vt do (
 				vert_array = #{ vn }
@@ -49,11 +54,14 @@ rollout dd "Untitled" width:162 height:150
 				Print normal
 				Print vcolor 
 				Print "-----------------------"
-				pb1.value += 1
+				
+				pb1.value =100.*(o+vn)/prograss
 			)
+			--pb1.value=0
+		
 			--deletemodifier obj.Edit_Normals
 		)
-		
+		print pb1.value
 	)
 
 )

@@ -7,6 +7,7 @@ rollout dd "Untitled" width:162 height:150
 	--	global sel = #( )
 	on checkuv pressed do
 	(
+		setCommandPanelTaskMode #modify
 		sel = getcurrentselection() --当前选择的物体
 		pb1.value = 0
 
@@ -29,7 +30,7 @@ rollout dd "Untitled" width:162 height:150
 
 
 			--进度条数量
-			prograss=sel.count+vt
+			prograss = sel.count + vt
 			--遍历顶点返回法线引用
 			for vn = 1 to vt do (
 				vert_array = #{ vn }
@@ -55,11 +56,9 @@ rollout dd "Untitled" width:162 height:150
 				Print vcolor 
 				Print "-----------------------"
 				
-				pb1.value =100.*(o+vn)/prograss
+				pb1.value = 100. * ( o + vn ) / prograss
 			)
-			--pb1.value=0
-		
-			--deletemodifier obj.Edit_Normals
+			deletemodifier obj En
 		)
 		print pb1.value
 	)

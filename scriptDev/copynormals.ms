@@ -191,8 +191,6 @@ rollout normal_thief "Normal Thief 1.0 +" width:258 --height:167
 					normal_array = #{ }
 					sel[obj].Edit_Normals.ConvertVertexSelection &vert_array &normal_array
 					normal_result = normal_array as array -- vira array normal p/ poder ler embaixo
-					--
-					
 					sel[obj].modifiers[#Edit_Normals].EditNormalsMod.Setnormal normal_result[1] normalt -- aplica normal no vertice atual
 
 					-- show stats

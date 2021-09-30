@@ -1,13 +1,11 @@
-rollout dd "Untitled" width:162 height:300
+rollout dd "Normal_Combine" width:162 height:100
 (
 	
-	button 'BakeNormal' "BakeNormal" pos:[13, 26] width:142 height:47 enabled:true align:#left
-	button 'TranslateNormal' "TranslateNormal" pos:[13, 76] width:142 height:47 enabled:true align:#left
-	pickbutton pick "< Pick Reference Object >" pos:[13, 125] width:142 height:47 enabled:true align:#left
-	progressBar pb1 "进度条" pos:[13, 200] width:142 height:18 color:( color 255 0 0 )	
+	button 'BakeNormal' "BakeNormal" pos:[13, 10] width:142 height:47 enabled:true align:#left
+	progressBar pb1 "进度条" pos:[13, 70] width:142 height:18 color:( color 255 0 0 )	
 	global pre_normal = #( )
 	--	global sel = #( )
-	on BakeNormal pressed do(
+	on BakeNormal pressed do (
 		setCommandPanelTaskMode #modify
 		sel = getcurrentselection() --当前选择的物体
 		pb1.value = 0
@@ -63,57 +61,6 @@ rollout dd "Untitled" width:162 height:300
 		)
 		print pb1.value
 	)
-	--转移法线
 
-	on pick picked refmesh do (
-		
-		if  pick.object!=undefined do(
-			print "1"
-			modPanel.setCurrentObject pick.object.baseObject
-			convertToPoly pick.object
-		)
-	)
-
-	on TranslateNormal pressed do(
-		if pick.object==undefined do(
-			Print "222"
-			messagebox "没有拾取目标转换的mesh"
-			return null
-		)
-		refobj=pick.object
-		-- refvn =polyop.getNumVerts refobj
-		-- refEn = sel.modifiers[#Edit_Normals]
-		sels = getcurrentselection()--当前选择的物体
-		if sels.Count>=1 do(
-			sel=sels[1]
-			
-			if sel==undefined do(
-				messagebox "没有选择mesh"
-				return null
-			)
-			convertToPoly sel
-			-- addmodifier sel ( Edit_Normals())
-			--En = sel.modifiers[#Edit_Normals]
-			vn =polyop.getNumVerts sel
-			print vn
-			--i=1
-			--先遍历要改的顶点法线 再遍历用来替换的顶点法线 计算距离 然后替换
-			for n=1 to vn do(
-				ct=sel.getvertex n
-				print (ct.x)
-
-				refn= polyop.getNumVerts refobj
-				for  rn=1 to refn do(
-					
-				)
-			
-				
-			)
-
-		)
-		
-
-
-	)
 )
 createdialog dd 
